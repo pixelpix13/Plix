@@ -9,3 +9,4 @@ router.get("/logout", logout);   // GET for logout
 router.post("/verify", verify);
 
 export default router;
+
