@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .hero-bg {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("C:\Users\Purav\OneDrive - University Of Houston\Desktop\Cloud Computing\CDN Project\frontend\public\hero.png");
     background-size: cover;
     background-position: center;
 }

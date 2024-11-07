@@ -16,7 +16,8 @@ const VerifyCodePage = () => {
 		setErrorMessage("");
 
 		try {
-			const response = await axios.post("http://localhost:5000/auth/verify", {
+			// Use the API Gateway Invoke URL for the verify endpoint
+			const response = await axios.post("https://lqze31k6fk.execute-api.us-east-1.amazonaws.com/verify", {
 				username,
 				code,
 			});
@@ -24,6 +25,7 @@ const VerifyCodePage = () => {
 			navigate("/login"); // Redirect to login page after successful verification
 		} catch (error) {
 			setErrorMessage(error.response?.data?.message || "Verification failed.");
+			console.error("Verification error:", error.response?.data || error);
 		}
 	};
 
