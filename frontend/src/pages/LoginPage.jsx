@@ -15,8 +15,8 @@ const LoginPage = () => {
 		setErrorMessage("");
 
 		try {
-			// Make a login request to the backend
-			const response = await axios.post("http://localhost:5000/auth/login", {
+			// Use the API Gateway Invoke URL for the login endpoint
+			const response = await axios.post("https://lqze31k6fk.execute-api.us-east-1.amazonaws.com/login", {
 				email,
 				password,
 			});
@@ -32,49 +32,50 @@ const LoginPage = () => {
 			}
 		} catch (error) {
 			setErrorMessage(error.response?.data?.message || "Login failed. Please try again.");
+			console.error("Login error:", error.response?.data || error);
 		} finally {
 			setIsLoggingIn(false);
 		}
 	};
 
 	return (
-		<div className='h-screen w-full hero-bg'>
-			<header className='max-w-6xl mx-auto flex items-center justify-between p-4'>
+		<div className="h-screen w-full hero-bg">
+			<header className="max-w-6xl mx-auto flex items-center justify-between p-4">
 				<Link to={"/"}>
-					<img src='/netflix-logo.png' alt='logo' className='w-52' />
+					<img src="/plix-logo.png" alt="logo" className="w-52" />
 				</Link>
 			</header>
 
-			<div className='flex justify-center items-center mt-20 mx-3'>
-				<div className='w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md'>
-					<h1 className='text-center text-white text-2xl font-bold mb-4'>Login</h1>
+			<div className="flex justify-center items-center mt-20 mx-3">
+				<div className="w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md">
+					<h1 className="text-center text-white text-2xl font-bold mb-4">Login</h1>
 
 					{errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
 
-					<form className='space-y-4' onSubmit={handleLogin}>
+					<form className="space-y-4" onSubmit={handleLogin}>
 						<div>
-							<label htmlFor='email' className='text-sm font-medium text-gray-300 block'>
+							<label htmlFor="email" className="text-sm font-medium text-gray-300 block">
 								Email
 							</label>
 							<input
-								type='email'
-								className='w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring'
-								placeholder='you@example.com'
-								id='email'
+								type="email"
+								className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring"
+								placeholder="you@example.com"
+								id="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 							/>
 						</div>
 
 						<div>
-							<label htmlFor='password' className='text-sm font-medium text-gray-300 block'>
+							<label htmlFor="password" className="text-sm font-medium text-gray-300 block">
 								Password
 							</label>
 							<input
-								type='password'
-								className='w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring'
-								placeholder='••••••••'
-								id='password'
+								type="password"
+								className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring"
+								placeholder="••••••••"
+								id="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 							/>
@@ -82,15 +83,15 @@ const LoginPage = () => {
 
 						<button
 							type="submit"
-							className='w-full py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors duration-200'
+							className="w-full py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors duration-200"
 							disabled={isLoggingIn}
 						>
 							{isLoggingIn ? "Loading..." : "Login"}
 						</button>
 					</form>
-					<div className='text-center text-gray-400'>
+					<div className="text-center text-gray-400">
 						Don't have an account?{" "}
-						<Link to={"/signup"} className='text-red-500 hover:underline'>
+						<Link to={"/signup"} className="text-red-500 hover:underline">
 							Sign Up
 						</Link>
 					</div>

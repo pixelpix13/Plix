@@ -16,7 +16,8 @@ const SignUpPage = () => {
 		setErrorMessage("");
 
 		try {
-			const response = await axios.post("http://localhost:5000/auth/signup", {
+			// Use the API Gateway Invoke URL here
+			const response = await axios.post("https://lqze31k6fk.execute-api.us-east-1.amazonaws.com/signup", {
 				email,
 				username,
 				password,
@@ -26,20 +27,21 @@ const SignUpPage = () => {
 			navigate("/verify-code", { state: { email, username } });
 		} catch (error) {
 			setErrorMessage(error.response?.data?.message || "An error occurred during signup.");
+			console.error("Signup error:", error.response?.data || error);
 		} finally {
 			setIsSigningUp(false);
 		}
 	};
 
 	return (
-		<div className="h-screen w-full hero-bg flex flex-col items-center justify-center">
-			<header className="w-full max-w-6xl flex items-center justify-between p-4">
+		<div className="h-screen w-full hero-bg">
+			<header className="max-w-6xl mx-auto flex items-center justify-between p-4">
 				<Link to={"/"}>
-					<img src="/netflix-logo.png" alt="logo" className="w-52" />
+					<img src="/plix-logo.png" alt="logo" className="w-52" />
 				</Link>
 			</header>
 
-			<div className="flex justify-center items-center mt-10 mx-3">
+			<div className="flex justify-center items-center mt-20 mx-3">
 				<div className="w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md">
 					<h1 className="text-center text-white text-2xl font-bold mb-4">Sign Up</h1>
 
@@ -89,6 +91,7 @@ const SignUpPage = () => {
 						</div>
 
 						<button
+							type="submit"
 							className="w-full py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors duration-200"
 							disabled={isSigningUp}
 						>

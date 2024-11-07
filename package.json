@@ -15,7 +15,7 @@
     "@aws-sdk/client-cognito-identity-provider": "^3.682.0",
     "amazon-cognito-identity-js": "^6.3.12",
     "aws-amplify": "^6.8.0",
-    "aws-sdk": "^2.1691.0",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
