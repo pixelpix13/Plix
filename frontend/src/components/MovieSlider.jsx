@@ -35,10 +35,10 @@ const MovieSlider = ({ movies }) => {
 							/>
 							{/* Movie ID overlay on hover */}
 							<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-								<p className="text-white text-lg font-semibold">{movie.id}</p>
+								<p className="text-white text-lg font-semibold">{movie.id.split('-')[1]}</p>
 							</div>
 						</div>
-						<p className="mt-2 text-center text-sm">{movie.title}</p>
+						
 					</Link>
 				))}
 			</div>

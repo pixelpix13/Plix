@@ -21,7 +21,6 @@ const VerifyCodePage = () => {
 				username,
 				code,
 			});
-			alert("Verification successful! You can now log in.");
 			navigate("/login"); // Redirect to login page after successful verification
 		} catch (error) {
 			setErrorMessage(error.response?.data?.message || "Verification failed.");
