@@ -14,7 +14,7 @@ const LoginPage = () => {
 	// When the user state changes to a logged-in state, navigate to the home page
 	useEffect(() => {
 		if (user) {
-			navigate("/home");
+			navigate("/");
 		}
 	}, [user, navigate]);
 
