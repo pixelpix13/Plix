@@ -1,91 +1,73 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/authUser.js";
+import { useEffect, useState } from "react";
+import Navbar from "../../components/Navbar";
+import MovieSlider from "../../components/MovieSlider";
 
-const LoginPage = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [errorMessage, setErrorMessage] = useState("");
-	const navigate = useNavigate();
+const HomeScreen = () => {
+	const [movies, setMovies] = useState([]);
+	const [imgLoading, setImgLoading] = useState(true);
 
-	// Get state and functions from useAuthStore
-	const { user, login, isLoggingIn, error } = useAuthStore();
-
-	// When the user state changes to a logged-in state, navigate to the home page
 	useEffect(() => {
-		if (user) {
-			navigate("/home"); // Redirect to the home page once `user` is set
-		}
-	}, [user, navigate]);
+		const fetchMovies = async () => {
+			try {
+				// Fetch data from Lambda function to retrieve a list of movies
+				const response = await fetch("https://lqze31k6fk.execute-api.us-east-1.amazonaws.com/movies/getMovies"); // Adjust Lambda URL if needed
+				const data = await response.json();
+				setMovies(data.movies); // Assuming `movies` is the array of movie objects returned
+			} catch (error) {
+				console.error("Failed to fetch movies:", error);
+			}
+		};
 
-	const handleLogin = async (e) => {
-		e.preventDefault();
-		setErrorMessage(""); // Clear previous errors
-		await login({ email, password }); // Call the login function from useAuthStore
-	};
+		fetchMovies();
+	}, []);
+
+	if (movies.length === 0) {
+		return (
+			<div className="h-screen text-white relative">
+				<Navbar />
+				<div className="absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center -z-10 shimmer" />
+			</div>
+		);
+	}
 
 	return (
-		<div className="h-screen w-full hero-bg">
-			<header className="max-w-6xl mx-auto flex items-center justify-between p-4">
-				<Link to={"/"}>
-					<img src="/plix-logo.png" alt="logo" className="w-52" />
-				</Link>
-			</header>
+		<>
+			<div className="relative h-screen text-white">
+				<Navbar />
 
-			<div className="flex justify-center items-center mt-20 mx-3">
-				<div className="w-full max-w-md p-8 space-y-6 bg-black/60 rounded-lg shadow-md">
-					<h1 className="text-center text-white text-2xl font-bold mb-4">Login</h1>
+				{/* Show the first movie as the hero image */}
+				{imgLoading && (
+					<div className="absolute top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center shimmer -z-10" />
+				)}
 
-					{errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
-					{error && <p className="text-red-500 text-center">{error}</p>}
+				<img
+					src={movies[0].posterUrl || movies[0].backdropUrl} // Use `posterUrl` or adjust based on movie data structure from Lambda
+					alt="Hero img"
+					className="absolute top-0 left-0 w-full h-full object-cover -z-50"
+					onLoad={() => setImgLoading(false)}
+				/>
 
-					<form className="space-y-4" onSubmit={handleLogin}>
-						<div>
-							<label htmlFor="email" className="text-sm font-medium text-gray-300 block">
-								Email
-							</label>
-							<input
-								type="email"
-								className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring"
-								placeholder="you@example.com"
-								id="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-							/>
-						</div>
+				<div className="absolute top-0 left-0 w-full h-full bg-black/50 -z-50" aria-hidden="true" />
 
-						<div>
-							<label htmlFor="password" className="text-sm font-medium text-gray-300 block">
-								Password
-							</label>
-							<input
-								type="password"
-								className="w-full px-3 py-2 mt-1 border border-gray-700 rounded-md bg-transparent text-white focus:outline-none focus:ring"
-								placeholder="••••••••"
-								id="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-							/>
-						</div>
-
-						<button
-							type="submit"
-							className="w-full py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors duration-200"
-							disabled={isLoggingIn}
-						>
-							{isLoggingIn ? "Loading..." : "Login"}
-						</button>
-					</form>
-					<div className="text-center text-gray-400">
-						Don't have an account?{" "}
-						<Link to={"/signup"} className="text-red-500 hover:underline">
-							Sign Up
-						</Link>
+				<div className="absolute top-0 left-0 w-full h-full flex flex-col justify-center px-8 md:px-16 lg:px-32">
+					<div className="bg-gradient-to-b from-black via-transparent to-transparent absolute w-full h-full top-0 left-0 -z-10" />
+					<div className="max-w-2xl">
+						<h1 className="mt-4 text-6xl font-extrabold text-balance">{movies[0].title}</h1>
+						<p className="mt-2 text-lg">
+							{movies[0].releaseYear} | {movies[0].rating || "PG-13"}
+						</p>
+						<p className="mt-4 text-lg">
+							{movies[0].description.length > 200 ? movies[0].description.slice(0, 200) + "..." : movies[0].description}
+						</p>
 					</div>
 				</div>
 			</div>
-		</div>
+
+			<div className="flex flex-col gap-10 bg-black py-10">
+				<MovieSlider movies={movies} />
+			</div>
+		</>
 	);
 };
 
-export default LoginPage;
+export default HomeScreen;

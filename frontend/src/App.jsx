@@ -1,19 +1,30 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { useAuthStore } from './store/authUser'; // import the auth store
 import SignUpPage from './pages/SignUpPage';
 import VerifyCodePage from './pages/VerifyCodePage';
-import LoginPage from './pages/LoginPage'
+import LoginPage from './pages/LoginPage';
 import HomePage from './pages/home/HomePage';
-
+import WatchPage from './pages/WatchPage';
 function App() {
+    const { checkAuth, user, isCheckingAuth } = useAuthStore();
+
+    useEffect(() => {
+        checkAuth(); // Check if the user is authenticated when the app loads
+    }, [checkAuth]);
+
+    if (isCheckingAuth) {
+        return <div>Loading...</div>; // Display a loading screen while checking auth
+    }
+
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<HomePage />} /> {/* Replace with your home page */}
-                <Route path="/signup" element={<SignUpPage />} />
-                <Route path="/verify-code" element={<VerifyCodePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/home" element={<HomePage />} />
+                <Route path="/" element={user ? <HomePage /> : <Navigate to="/login" />} />
+                <Route path="/signup" element={user ? <Navigate to="/" /> : <SignUpPage />} />
+                <Route path="/verify-code" element={user ? <Navigate to="/" /> : <VerifyCodePage />} />
+                <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
+                <Route path='/watch/:id' element={user ? <WatchPage /> : <Navigate to={"/login"} />} />
                 {/* Add other routes as needed */}
             </Routes>
         </Router>
