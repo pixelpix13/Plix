@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/authUser.js";
+import { useAuthStore } from "../../store/authUser.js";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
@@ -14,7 +14,7 @@ const LoginPage = () => {
 	// When the user state changes to a logged-in state, navigate to the home page
 	useEffect(() => {
 		if (user) {
-			navigate("/home");
+			navigate("/home"); // Redirect to the home page once `user` is set
 		}
 	}, [user, navigate]);
 
