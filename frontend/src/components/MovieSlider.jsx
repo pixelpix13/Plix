@@ -2,18 +2,26 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const MovieSlider = ({ movies }) => {
+const MovieSlider = ({ movies, title }) => {
 	const [showArrows, setShowArrows] = useState(false);
 	const sliderRef = useRef(null);
 
 	const scrollLeft = () => {
 		if (sliderRef.current) {
-			sliderRef.current.scrollBy({ left: -sliderRef.current.offsetWidth, behavior: "smooth" });
+			sliderRef.current.scrollBy({
+				left: -sliderRef.current.offsetWidth / 2,
+				behavior: "smooth",
+			});
 		}
 	};
 
 	const scrollRight = () => {
-		sliderRef.current.scrollBy({ left: sliderRef.current.offsetWidth, behavior: "smooth" });
+		if (sliderRef.current) {
+			sliderRef.current.scrollBy({
+				left: sliderRef.current.offsetWidth / 2,
+				behavior: "smooth",
+			});
+		}
 	};
 
 	return (
@@ -22,27 +30,44 @@ const MovieSlider = ({ movies }) => {
 			onMouseEnter={() => setShowArrows(true)}
 			onMouseLeave={() => setShowArrows(false)}
 		>
-			<h2 className="mb-4 text-2xl font-bold">Movies</h2>
+			<h2 className="mb-4 text-2xl font-bold">{title}</h2>
 
-			<div className="flex space-x-4 overflow-x-scroll scrollbar-hide" ref={sliderRef}>
+			<div
+				className="flex overflow-x-scroll space-x-4"
+				style={{
+					scrollSnapType: "x mandatory",
+					WebkitOverflowScrolling: "touch",
+					overflowX: "scroll",
+					msOverflowStyle: "none", // Hide scrollbar for IE and Edge
+					scrollbarWidth: "none", // Hide scrollbar for Firefox
+				}}
+				ref={sliderRef}
+			>
 				{movies.map((movie) => (
-					<Link to={`/watch/${movie.id}`} className="min-w-[150px] relative group" key={movie.id}>
-						<div className="rounded-lg overflow-hidden w-full h-[500px] relative">
+					<Link
+						to={`/watch/${movie.id}`}
+						className="min-w-[200px] flex-shrink-0 scroll-snap-align-start"
+						key={movie.id}
+					>
+						<div className="rounded-lg overflow-hidden w-[300px] h-[400px] relative group">
 							<img
-								src={movie.posterUrl} // Adjust based on movie data structure from Lambda
-								alt="Movie image"
+								src={movie.posterUrl}
+								alt={movie.title}
 								className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
 							/>
 							{/* Movie ID overlay on hover */}
 							<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-								<p className="text-white text-lg font-semibold">{movie.id.split('-')[1]}</p>
 							</div>
 						</div>
-						
+						{/* Movie title below the poster */}
+						<p className="text-center mt-2 text-sm font-semibold text-gray-300 hover:text-white transition duration-300">
+							{movie.title.length > 20 ? movie.title.slice(0, 20) + "..." : movie.title}
+						</p>
 					</Link>
 				))}
 			</div>
 
+			{/* Arrow buttons for scrolling */}
 			{showArrows && (
 				<>
 					<button

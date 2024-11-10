@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const SignUpPage = () => {
@@ -9,6 +9,15 @@ const SignUpPage = () => {
 	const [isSigningUp, setIsSigningUp] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
+	const location = useLocation();
+
+	useEffect(() => {
+		const params = new URLSearchParams(location.search);
+		const emailParam = params.get("email");
+		if (emailParam) {
+			setEmail(emailParam);
+		}
+	}, [location]);
 
 	const handleSignUp = async (e) => {
 		e.preventDefault();
