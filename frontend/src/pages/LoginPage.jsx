@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/authUser.js";
 
 const LoginPage = () => {
@@ -7,12 +7,23 @@ const LoginPage = () => {
 	const [password, setPassword] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	// Get state and functions from useAuthStore
 	const { user, login, isLoggingIn, error } = useAuthStore();
 
 	// When the user state changes to a logged-in state, navigate to the home page
+
 	useEffect(() => {
+		const params = new URLSearchParams(location.search);
+		const emailParam = params.get("email");
+		if (emailParam) {
+			setEmail(emailParam);
+		}
+	}, [location]);
+	
+	useEffect(() => {
+		
 		if (user) {
 			navigate("/");
 		}
