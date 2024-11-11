@@ -6,7 +6,12 @@
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url("https://cdnproject1.s3.us-east-1.amazonaws.com/hero.png");
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;  /* Full viewport height */
+    width: 100%;    /* Full width */
+    overflow: hidden; /* Prevents scroll bars if content slightly overflows */
 }
+
 
 .App {
 	text-align: center;
