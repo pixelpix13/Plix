@@ -24,8 +24,8 @@ const HomeScreen = () => {
 
 				// Filter out movies with empty or missing updatedAt, then sort by updatedAt and take top 10
 				const sortedMovies = movies
-					.filter(movie => movie.updatedAt) // Exclude movies without updatedAt
-					.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+					.filter(movie => movie.createdAt) // Exclude movies without updatedAt
+					.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 				
 				const recentMovies = sortedMovies.slice(0, 10); // Get the top 10 recently updated movies
 				setNewlyAddedMovies(recentMovies);
