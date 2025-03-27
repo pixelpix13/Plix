@@ -1,3 +1,7 @@
+It is a completely severless web application which is a small clone of netflix.
+
+
+
 Process Outline and Key Steps
 Step 1: Set up Cognito for User Authentication
 1.	Created a Cognito User Pool:
