@@ -1,4 +1,4 @@
-It is a completely severless web application which is a small clone of netflix.
+This application is a completely severless web application which is a small clone of netflix.
 
 
 
